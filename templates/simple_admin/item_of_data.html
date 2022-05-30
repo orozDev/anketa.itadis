@@ -1,0 +1,54 @@
+{% extends 'simple_admin/base.html' %}
+{% block title %}| {{ data.name }}{% endblock title %}
+{% block form_id %}{{ data.form.id }}{% endblock form_id %}
+{% block breaadcumbs %}
+    <li><a href="{% url 'adminPanel' %}">ADMIN PANEL</a></li>
+    <li><a href="{% url 'listDatas' pk=data.form.id  %}">{{ data.form.title }}</a></li>
+    <li><span>{{ data.name }}</span></li>
+{% endblock breaadcumbs %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-8"><h4 class="mb-4">{{ data.name }} - {{ data.form.title }}</h4></div>
+        <div class="col-md-4 text-right">
+            <span><label for="is_checked">Проверено</label></span>
+            <input type="checkbox" id="is_checked" {% if data.is_checked  %}checked{% endif %} value="{{ data.id }}"> |
+
+            <a class="btn btn-danger" href="{% url 'deleteData' pk=data.id %}" >Удалить запись</a>
+        </div>
+    </div>
+    
+    <div class="card">
+        <div class="card-body">
+            {% for item in detailDatas %}
+                <div class="mb-4">
+                    <h5 class="mb-2"> {{ item.input_type.title }}</h5>
+                    <div>
+                        {% if item.input_type.type_of_input.title == 'file' and item.item is not None %} 
+                            <a href="{{ item.item }}" class="btn btn-success btn-sm">Скачать файл</a>
+                        {% else %}
+                            {{ item.item }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" 
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        datas_checkbox = document.getElementById('is_checked');
+        datas_checkbox.addEventListener('click', () => {
+            $.ajax({
+                type: 'GET',
+                url: '/change_checker_of_data/?pk=' + datas_checkbox.value,
+                success: (data) => {
+                    if(data.is_done !== true) alert('error');
+                },
+                error: () => {
+                    alert('500!');
+                },
+            });
+        });
+    </script>
+{% endblock content %}

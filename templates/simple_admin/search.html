@@ -1,0 +1,43 @@
+{% extends 'simple_admin/base.html' %}
+{% block title %}| Поиск {% endblock title %}
+{% block form_id %}{{ form.id }}{% endblock form_id %}
+{% block breaadcumbs %}
+    <li><a href="{% url 'adminPanel' %}">ADMIN PANEL</a></li>
+    <li><span> Поиск</span></li>
+{% endblock breaadcumbs %}
+{% block content %}
+
+    <h2 class="mb-4">Результаты поиска по {{ title }}</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <div class="data-tables">
+                <table id="dataTable" class="text-center">
+                <thead class="bg-light text-capitalize">
+                    <tr>
+                        <th>Записи</th>
+                        <th>Название записи</th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detailData in detailDatas %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'getData' pk=detailData.data.id %}">{{ detailData.item }}</a>
+                        </td>
+                        <td>
+                            <a href="{% url 'getData' pk=detailData.data.id %}">{{ detailData.data.name }}</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2">Ничего не найдено</td>
+                    </tr> 
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+ 
+{% endblock content %}

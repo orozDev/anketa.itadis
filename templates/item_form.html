@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}| {{ form.title }}{% endblock title %}
+{% block content %}
+    <div class="container pt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="mb-9 display-2 text-center">{{ form.title }}</h2>
+                <form action="{% url 'getForm' pk=form.id %}" method="POST" enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {% for input in form.inputs.all %}
+                        {% if input.type_of_input.title  == 'textarea' %}
+                            <div class="mb-9">
+                                <h3>{{ input.title }} {% if input.is_required %}<span class="text-red">*</span>{% endif %}</h3>
+                                <div class="form-floating">
+                                    <textarea name="{{ input.type_of_input.title }}_{{ input.id }}"
+                                    placeholder="{{ input.title }}" id="{{ input.type_of_input.title }}_{{ input.id }}" 
+                                    cols="100%" rows="10" style="height: 5rem;" class="form-control"></textarea>
+                                    <label for="{{ input.type_of_input.title }}_{{ input.id }}">{{ input.title }}</label>
+                                </div>
+                            </div>
+
+                        {% elif input.items.count == 0 %}
+                            {% if input.type_of_input.title == 'file' %}
+                                <div class="mb-9">
+                                    <h3>{{ input.title }} {% if input.is_required %}<span class="text-red">*</span>{% endif %}</h3>
+                                    <input type="{{ input.type_of_input.title }}"
+                                    name="{{ input.type_of_input.title }}_{{ input.id }}"
+                                    placeholder="{{ input.title }}"
+                                    class="form-control"
+                                    {% if input.is_required %}required{% endif %}
+                                    >
+                                </div>    
+                            {% else %}
+                                <div class="mb-9">
+                                    <h3>{{ input.title }} {% if input.is_required %}<span class="text-red">*</span>{% endif %}</h3>
+                                    <div class="form-floating mb-8">
+                                        <input type="{{ input.type_of_input.title }}"
+                                        name="{{ input.type_of_input.title }}_{{ input.id }}"
+                                        placeholder="{{ input.title }}"
+                                        class="form-control"
+                                        {% if input.is_required %}required{% endif %}
+                                        >
+                                        <label for="{{ input.type_of_input.title }}_{{ input.id }}">{{ input.title }}</label>
+                                    </div>
+                                </div>   
+                            {% endif %}
+                        {% elif input.type_of_input.title  == 'radio' %}
+                            <div class="mb-9">
+                                <h3>{{ input.title }} {% if input.is_required %}<span class="text-red">*</span>{% endif %}</h3>
+                                {% for item in input.items.all %}
+                                    <div> 
+                                        <input 
+                                            type="{{ input.type_of_input.title }}"
+                                            name="{{ input.type_of_input.title }}_{{ input.id }}"
+                                            id="{{ input.type_of_input.title }}_{{ item.id }}" 
+                                            class="form-check-input"
+                                            value="{{ item.title }}"
+                                            {% if input.is_required %}required{% endif %}
+                                            > 
+                                            <label for="{{ input.type_of_input.title }}_{{ item.id }}">{{ item.title }}</label>
+                                        </div>
+                                {% endfor %}
+                            </div>
+                            
+                        {% elif input.type_of_input.title  == 'select' or input.items.count != 0  %}
+                            <div class="mb-9">
+                                <h3>{{ input.title }} {% if input.is_required %}<span class="text-red">*</span>{% endif %}</h3>
+                                <select 
+                                    name="{{ input.type_of_input.title }}_{{ input.id }}"
+                                    {% if input.is_required %}required{% endif %} 
+                                    class="form-select"
+                                    {% if input.type_of_input.title == 'multiple' %}multiple{% endif %}
+                                >
+                                    <option value="" disabled selected>{{ input.title }}</option>
+                                    {% for item in input.items.all %}
+                                        <option value="{{ item.title }}">{{ item.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
+
+                    {% endfor %}
+
+
+                    <div class="text-center"><input type="submit" class="btn btn-primary w-75"></div>
+                </form>
+            </div>
+        </div>  
+    </div>
+{% endblock content %}

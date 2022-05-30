@@ -1,0 +1,98 @@
+
+.time-element{
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+#map{
+    height: 500px;
+    font-size: 6rem;
+}
+
+#map::after{
+    content: "sdfsdfsdfsd";
+}
+
+.time-header{
+    font-size: 0.6rem !important;
+    text-align: center;
+    margin-top: -15px;
+    text-transform: uppercase;
+    padding: 0;
+}
+
+.line_bottom{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    
+}
+.outer_line{
+    width: 90%;
+    margin: 0px auto;
+}
+
+.navbar{
+    display: block !important;
+}
+
+@media screen and (max-width:992px) {
+    .time-header{
+        color: #fff;
+    }
+    .time-element{
+        color: #fff;
+    }
+}
+
+.offcanvas-nav{
+    width: 90% !important;
+}
+
+.area{
+    background-color: rgba(31, 80, 186, 0.5);
+    width: 100%;
+    min-height: 91vh;
+}
+
+.bg-img{
+    background-image: url('../img/bg.jpeg');
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.bg-dark-05{
+    background-color: rgba(26, 65, 153, 0.9);
+}
+
+
+.navbar.transparent:not(.fixed){
+    padding-top: 0 !important;
+}
+/* Bootstrap utils */
+
+
+    /* Medium size (md) */
+    @media screen and (min-width: 768px) {
+        .text-md-dark{
+            color: #444 !important; 
+        }
+    }
+
+
+.bg-transparent{
+    background-color: transparent m !important;
+}    
+
+.w-25{
+    width: 25% !important;
+}
+
+
+.pointer{
+    cursor: pointer !important;
+}
+
+/* end Bootstrap utils */

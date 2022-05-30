@@ -1,0 +1,48 @@
+{% extends 'simple_admin/base.html' %} 
+{% block title %}| Админ панель{% endblock title %} {% block content %}
+
+<div class="card">
+  <div class="card-body">
+    <h4 class="header-title">Формы</h4>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="mb-3">
+            <div class="alert alert-success">{{ message }}</div>
+        </div>
+      {% endfor %}
+    {% endif %}
+    <div class="data-tables overflow-auto">
+      <table id="dataTable" class="text-center">
+        <thead class="bg-light text-capitalize">
+          <tr>
+            <th>ID</th>
+            <th>Название формы</th>
+            <th>Количество заполненных</th>
+            <th>Дата добавление</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for form in forms %}
+          <tr>
+            <td>
+              <a href="{% url 'listDatas' pk=form.id %}">{{ form.id }}</a>
+            </td>
+            <td>
+              <a href="{% url 'listDatas' pk=form.id %}">{{ form.title }}</a>
+            </td>
+            <td>
+              <a href="{% url 'listDatas' pk=form.id %}">{{ form.cnt }}</a>
+            </td>
+            <td>
+              <a href="{% url 'listDatas' pk=form.id %}">{{ form.created_at }}</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- data table end -->
+
+{% endblock content %}

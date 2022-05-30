@@ -1,0 +1,9 @@
+{% load tags %}
+
+{% get_forms as forms %}
+
+{% for form in forms %}
+    <li class="" id="form_{{ form.id }}">
+        <a href="{% url 'listDatas' pk=form.id %}">{{ form.title }}</a> 
+    </li>      
+{% endfor %}

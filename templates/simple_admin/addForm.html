@@ -1,0 +1,85 @@
+{% extends 'simple_admin/base.html' %}
+{% block title %}| Поиск {% endblock title %}
+{% block form_id %}{{ form.id }}{% endblock form_id %}
+{% block breaadcumbs %}
+    <li><a href="{% url 'adminPanel' %}">ADMIN PANEL</a></li>
+    <li><span>Добавление формы</span></li>
+{% endblock breaadcumbs %}
+{% block content %}
+
+    <h2 class="mb-4">Добавление формы</h2>
+    
+    <div class="card">
+        <div class="card-body">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="mb-3"><input type="text" placeholder="Название формы" required class="form-control"></div>
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <h4>Поля</h4>
+                    </div>
+                    <div class="col-6 text-right">
+                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#staticBackdrop">
+                           Добавить поле
+                        </button>
+                          
+                    </div>
+                </div>
+                <input type="hidden" id="list_of_types" value="{% for type in types %}{% if type.is_selectable %}{{ type.title }} {% endif %}{% endfor %}">
+                <div id="fields" class=""></div>
+                <div id="makets" class="mb-3"></div>
+                <div>
+                    <button type="submit" class="btn btn-success w-100">Сохранить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Button trigger modal -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Добавление поле</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="#" method="POST" id="addFields">
+          <div class="modal-body">
+              <div class="mb-3"><input type="text" class="form-control" name="title" placeholder="Название поле" required></div>
+              <div class="mb-3">
+                <select name="type" id="select_type" class="form-control" required>
+                    <option value="" selected disabled>Выберите тип поли</option>
+                    {% for type in types %}
+                      <option value="{{ type.title }}" {% if type.is_selectable %}class="is_selectable"{% endif %}>{{ type.title }}</option>
+                    {% endfor %}
+                </select>
+              </div>
+              <div class="m-3">
+                <label for="is_required">Обезательное поле для заполнение</label>
+                <input type="checkbox" name="is_required" checked>
+              </div>
+              <div class="mb-3">
+                <div class="row">
+                  <div class="col-8 mb-3"><input type="text" class="form-control w-100" id="values" placeholder="Название item"></div>
+                  <div class="col-4 mb-3"><button class="btn btn-success w-100" type="button" id="addValues">Добавить</button></div>
+                  <div class="col-12" id="addSelectableFiled"></div>
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            <button type="submit"  class="btn btn-primary">Добавить</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('addForm').classList.add('d-none');
+        });   
+    </script>
+{% endblock content %}

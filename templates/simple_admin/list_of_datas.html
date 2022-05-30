@@ -1,0 +1,119 @@
+{% extends 'simple_admin/base.html' %}
+{% block title %}| {{ form.title }}{% endblock title %}
+{% block form_id %}{{ form.id }}{% endblock form_id %}
+{% block breaadcumbs %}
+    <li><a href="{% url 'adminPanel' %}">ADMIN PANEL</a></li>
+    <li><span>{{ form.title }}</span></li>
+{% endblock breaadcumbs %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-8"><h2 class="mb-4">{{ form.title }}</h2></div>
+        <div class="col-md-4 text-right">
+            <span><label for="is_published">Опубликовать</label></span>
+            <input type="checkbox" id="is_published" {% if form.is_published %}checked{% endif %} value=""> |
+
+            <button class="btn btn-danger" data-toggle="modal" data-target="#deleteForm" >Удалить форму</button>
+        </div>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="mb-3">
+                <div class="alert alert-success">{{ message }}</div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+  <!-- Modal -->
+  <div class="modal fade" id="deleteForm" tabindex="-1" aria-labelledby="deleteFormLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteFormLabel">Вы уверены ?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            Удалив форму, вы подтверждаете удаление всех записанных данных на эту форму!
+        </div>
+        <div class="modal-footer">
+            <a href="{% url 'deleteForm' pk=form.id %}" class="btn btn-danger">Удалить</a>
+            <button class="btn btn-primary" data-dismiss="modal">Отменить</button>    
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+    <div class="card">
+        <div class="card-body">
+            <h4 class="header-title">Данные</h4>
+            <div class="data-tables overflow-auto">
+                <table id="dataTable" class="text-center">
+                <thead class="bg-light text-capitalize">
+                    <tr>
+                    <th>ID</th>
+                    <th>Название записи</th>
+                    <th>Дата добавление</th>
+                    <th>Проверено</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in datas %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'getData' pk=data.id %}">{{ data.id }}</a>
+                        </td>
+                        <td>
+                            <a href="{% url 'getData' pk=data.id %}">{{ data.name }}</a>
+                        </td>
+                        <td>
+                            <a href="{% url 'getData' pk=data.id %}">{{ data.created_at }}</a>
+                        </td>
+                        <td>
+                            <input type="checkbox" class="is_published_data" value="{{ data.id }}" {% if data.is_checked %}checked{% endif %}>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" 
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('#is_published').addEventListener('click', () => {
+                $.ajax({
+                    data: {csrfmiddlewaretoken:'{{csrf_token}}',},
+                    type: 'POST',
+                    url: '{% url "listDatas" pk=form.id %}',
+                    success: (data) => {
+                        if(data.is_done !== true) alert('error');
+                    },
+                    error: () => {
+                        alert('500!');
+                    },
+                });
+            });
+
+            datas_checkbox = document.getElementsByClassName('is_published_data');
+            for(let i = 0; i < datas_checkbox.length; i++){
+                datas_checkbox[i].addEventListener('click', () => {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/change_checker_of_data/?pk=' + datas_checkbox[i].value,
+                        success: (data) => {
+                            if(data.is_done !== true) alert('error');
+                        },
+                        error: () => {
+                            alert('500!');
+                        },
+                    });
+                });
+            }
+        });
+    </script>
+{% endblock content %}
