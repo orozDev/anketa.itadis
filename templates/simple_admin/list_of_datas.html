@@ -84,6 +84,9 @@
     integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" 
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
+        $('#forms')[0].classList.add('active');
+    </script>
+    <script>
         window.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#is_published').addEventListener('click', () => {
                 $.ajax({

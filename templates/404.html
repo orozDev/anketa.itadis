@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="container">
+
+        <div><img src="{% static 'images/404.png' %}" class="w-50" alt=""></div>
+        <h4 class="text-center">Страница не найдена</h4>
+        <h3 class="text-center"><a href="{% url 'main' %}">Перейти на главную страницу</a></h3>
+
+    </div>
+
+{% endblock content %}
+

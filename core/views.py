@@ -6,7 +6,13 @@ from django.contrib import messages
 from django.db.models import Count
 from django.http import JsonResponse
 from django.core.files.storage import FileSystemStorage
+import requests
 from .models import *
+
+
+TOKEN = 'Token 85c897d05817b5c1154047fa5dda78dec35cd059'
+DOMEN = 'https://itadis.kg'
+
 
 
 def main(request):
@@ -99,6 +105,41 @@ def getData(request, pk):
 
     return render(request, 'simple_admin/item_of_data.html', context)
     
+
+@login_required(login_url='/login')
+def apiDatas(request):
+    response = requests.get(
+        f'{DOMEN}/api/get_through/', 
+        headers={'Authorization': TOKEN}
+    )
+
+    if response.status_code == 200:
+        data = response.json()['results']
+        return render(request, 'simple_admin/apiData.html', {'apiData': data})
+    else:
+        return render(request, 'simple_admin/apiData.html', {'error': True, 'status': response.status_code})
+        
+    
+@login_required(login_url='/login')
+def changeApiCheckbox(request):
+    value = request.GET.get('value')
+    id = int(request.GET.get('id'))
+    if value == 'True':
+        temp = False
+    else:
+        temp = True
+
+    response = requests.patch(
+        f'{DOMEN}/api/get_through/{id}/update/', 
+        data={'is_checked': temp},
+        headers={'Authorization': TOKEN},
+    )
+
+    if response.status_code == 200:
+        return JsonResponse({'is_done': True}, status=200)
+    else:
+        return JsonResponse({'is_done': False, 'code': response.status_code, 'data': response.json()}, status=500)
+
 
 @login_required(login_url='/login')
 def deleteForm(request, pk):

@@ -52,14 +52,16 @@
                 <div class="menu-inner">
                     <nav>
                         <ul class="metismenu" id="menu">
-                            <li class="active">
+                            <li class="" id="forms">
                                 <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>Формы</span></a>
                                 <ul class="collapse">
                                     {% include 'simple_admin/list_of_forms.html' %}
                                 </ul>
                             </li>
-                      
-                    
+
+                            <li class="" id="apiForms">
+                                <a href="{% url 'api_datas' %}" aria-expanded="true"><i class="ti-pencil-alt"></i><span>Данные из сайта</span></a>
+                            </li>
         
                         </ul>
                     </nav>

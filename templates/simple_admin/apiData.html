@@ -1,0 +1,82 @@
+{% extends 'simple_admin/base.html' %}
+{% load tags %}
+{% block title %}| Данные из сайта{% endblock title %}
+{% block breaadcumbs %}
+    <li><a href="{% url 'adminPanel' %}">ADMIN PANEL</a></li>
+    <li><span>Данные из сайта</span></li>
+{% endblock breaadcumbs %}
+{% block content %}
+    <div class="card">
+        <div class="card-body">
+            {% if error %}
+                <h2 class="text-center text-danger">
+                    Ошибка {{ status }}
+                </h2>
+            {% else %}
+            
+                <h4 class="header-title">Данные</h4>
+                <div class="data-tables overflow-auto">
+                    <table id="apiDataTable" class="text-center">
+                    <thead class="bg-light text-capitalize">
+                        <tr>
+                            <th>Статус обратной связи</th>
+                            <th>Фамилия и имя</th>
+                            <th>Номер телефона</th>
+                            <th>Цель звонка</th>
+                            <th>Дата заполнения</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in apiData %}
+                        <tr>
+                            <td>
+                                <input type="checkbox" class="change_api_checkbox" value="{{ data.id }}-{{ data.is_checked }}" {% if data.is_checked %}checked{% endif %}>
+                            </td>
+                            <td>
+                                <span>{{ data.full_name }}</span>
+                            </td>
+                            <td>
+                                <span>{{ data.phone_number }}</span>
+                            </td>
+                            <td>
+                            <span>{{ data.target }}</span> 
+                            </td>
+                            <td>
+                                <span>{{ data.created_at|apiDate }}</span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        document.getElementById('apiForms').classList.add('active');
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" 
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            let checkboxes = document.getElementsByClassName('change_api_checkbox');
+            for (let i = 0; i < checkboxes.length; i++){
+                checkboxes[i].addEventListener('click', () => {
+                    $.ajax({
+                        data: {id: checkboxes[i].value.split('-')[0], value: checkboxes[i].value.split('-')[1]},
+                        method: 'GET',
+                        url: `/admin/change_api_checkbox/?id=${checkboxes[i].value.split('-')[0]}&value=${checkboxes[i].value.split('-')[1]}/`,
+                        success: (data) => {
+                            if (data.is_done) alert('success');
+                            else alert('error');
+                        },
+                        error: () => {
+                            alert('error!');
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+{% endblock content %}

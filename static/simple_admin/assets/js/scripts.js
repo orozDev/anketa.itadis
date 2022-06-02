@@ -110,6 +110,14 @@
         });
         
     }
+    if($('#apiDataTable')){
+        $('#apiDataTable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.12.0/i18n/ru.json'
+            },
+            "iDisplayLength": 40, 
+        })
+    }
     if ($('#dataTable2').length) {
         $('#dataTable2').DataTable({
             responsive: true,
